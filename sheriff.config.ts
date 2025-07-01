@@ -27,7 +27,6 @@ const domainApiTag = ({ from, to }) => {
 
 export const config: SheriffConfig = {
   enableBarrelLess: true,
-  showWarningOnBarrelCollision: false,
   modules: {
     apps: {
       '<domain>': ['domain:<domain>', 'type:app']
@@ -36,16 +35,16 @@ export const config: SheriffConfig = {
       domain: {
         '<domain>': {
           'src': ['domain:<domain>', 'type:lib'],
-          'src/lib/api-<target>': ['domain:<domain>-api-<target>', 'type:api'],
-          'src/lib/<type>-<a>-<b>': ['domain:<domain>', 'type:<type>'],
-          'src/lib/<type>-<a>': ['domain:<domain>', 'type:<type>'],
+          'src/lib': {
+            'api-<target>': ['domain:<domain>-api-<target>', 'type:api'],
+            '<type>': ({ type }) => ['domain:<domain>', `type:${ type.split('-')[0] }`],
+          },
         }
       },
       shared: {
-        '<shared-name>': {
+        '<domain>': {
           'src': ['domain:shared', 'type:lib'],
-          'src/lib/<type>-<a>-<b>': ['domain:shared', 'type:<type>'],
-          'src/lib/<type>-<a>': ['domain:shared', 'type:<type>'],
+          'src/lib/<type>': ({ type }) => ['domain:shared', `type:${ type.split('-')[0] }`],
         }
       },
     }
