@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, signal } from '@angular/core';
+import { ReactiveNode } from '@angular/core/primitives/signals';
 import { FormsModule } from '@angular/forms';
 import { Flight, injectTicketsFacade } from '../../logic-flight';
 import { FlightCardComponent, FlightFilterComponent } from '../../ui-flight';
-import { ReactiveNode, SIGNAL } from '@angular/core/primitives/signals';
-import { injectSignalsLogger } from '@flight-demo/shared/core';
 
 
 @Component({
@@ -43,10 +42,6 @@ export class FlightSearchComponent {
       () => this.search(),
       { debugName: 'flight search effect' }
     );
-
-    console.log(this.route[SIGNAL]);
-
-    injectSignalsLogger();
   }
   
   protected search(): void {
