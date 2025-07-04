@@ -32,6 +32,7 @@ export class FlightSearchComponent {
     5: true
   };
   protected flights = this.ticketsFacade.flights;
+  protected firstname = 'Mary';
 
   constructor() {
     let activeConsumer: ReactiveNode | null;
@@ -42,6 +43,11 @@ export class FlightSearchComponent {
       () => this.search(),
       { debugName: 'flight search effect' }
     );
+
+    setTimeout(() => {
+      this.firstname = 'Peter';
+      console.log('Firstname updated', this.firstname);
+    }, 5_000);
   }
   
   protected search(): void {
