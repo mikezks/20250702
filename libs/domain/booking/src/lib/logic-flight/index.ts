@@ -1,5 +1,6 @@
 
 export * from './state';
+export * from './data-access/flight.service';
 export * from './data-access/flight.resolver';
 export * from './model/basket';
 export * from './model/flight';

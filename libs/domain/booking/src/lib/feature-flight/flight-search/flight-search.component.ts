@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, inject, Injector, OnInit, runInInjectionContext, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Flight, FlightFilter, injectTicketsFacade } from '../../logic-flight';
+import { Flight, FlightService, injectTicketsFacade } from '../../logic-flight';
 import { FlightCardComponent, FlightFilterComponent } from '../../ui-flight';
 
 
@@ -15,8 +15,9 @@ import { FlightCardComponent, FlightFilterComponent } from '../../ui-flight';
   ],
   templateUrl: './flight-search.component.html',
 })
-export class FlightSearchComponent {
+export class FlightSearchComponent implements OnInit {
   private ticketsFacade = injectTicketsFacade();
+  private injector = inject(Injector);
 
   protected filter = signal({
     from: 'London',
@@ -33,8 +34,21 @@ export class FlightSearchComponent {
   protected flights = this.ticketsFacade.flights;
 
   constructor() {
-    effect(() => console.log(this.route()));
-    effect(() => this.search());
+    const loggerEffectRef = effect(() => console.log(this.route()));
+    effect(() => this.search(), {
+      injector: this.injector
+    });
+
+    setTimeout(() => loggerEffectRef.destroy(), 5_000);
+  }
+  
+  ngOnInit(): void {
+    /* runInInjectionContext(
+      this.injector,
+      () => inject(FlightService)
+    ) */
+   
+    this.injector.get(FlightService).findById(1).subscribe(console.log);
   }
 
   protected search(): void {
