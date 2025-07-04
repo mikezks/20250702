@@ -35,6 +35,28 @@ export class FlightSearchComponent {
   constructor() {
     effect(() => console.log(this.route()));
     effect(() => this.search());
+
+    // Writable Signal update behavior
+    console.log(this.filter().from);
+    this.filter.update(curr => ({ ...curr, from: 'Amsterdam' }));
+    console.log(this.filter().from);
+    this.filter.update(curr => ({ ...curr, from: 'Madrid' }));
+    console.log(this.filter().from);
+    this.filter.update(curr => ({ ...curr, from: 'Rome' }));
+    console.log(this.filter().from);
+    this.filter.update(curr => ({ ...curr, from: 'Barcelona' }));
+    console.log(this.filter().from);
+    this.filter.update(curr => ({ ...curr, from: 'Oslo' }));
+    console.log(this.filter().from);
+
+    // Glitch-free behavior
+    const counter = signal(0);
+    const isEven = computed(() => counter() % 2 === 0);
+    effect(() => console.log({
+      counter: counter(),
+      isEven: isEven()
+    }));
+    setInterval(() => counter.update(curr => curr + 1), 1_000);
   }
 
   protected search(): void {
